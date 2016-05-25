@@ -45,6 +45,15 @@
 		<script src="assets/js/html5shiv.min.js"></script>
 		<script src="assets/js/respond.min.js"></script>
 		<![endif]-->
+
+    <script language="javascript" type="text/javascript">
+        function OpenPopupCenter(pageURL, title, w, h) {
+            var left = (screen.width - w) / 2;
+            var top = (screen.height - h) / 4;  // for 25% - devide by 4  |  for 33% - devide by 3
+            var targetWin = window.open(pageURL, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+        } 
+    </script>
+
 	</head>
 
 	<body class="no-skin">
@@ -632,12 +641,6 @@
                                                     </a>
                                                 </li>
 
-                                                <li>
-                                                    <a data-toggle="tab" href="#template">
-                                                        Template
-                                                        <i class="ace-icon"></i>
-                                                    </a>
-                                                </li>
                                             </ul>
 
                                             <div class="tab-content">
@@ -649,32 +652,22 @@
                                                 </div>
 
                                                 <div id="packages" class="tab-pane fade">
-<div class="row">
-<div class='col-md-2'>
 Package:  
 <div class="btn-group">
       <a class="btn btn-sm btn-yellow dropdown-toggle btn-select2" data-toggle="dropdown" href="#">Select Version <span class="ace-icon fa fa-caret-down icon-only"></span></a>
     <ul class="dropdown-menu dropdown-yellow" id="package_version" >
     </ul>
 </div><!-- /.btn-group -->
-</div>
-<div class='col-md-8'></div>
-<div class='col-md-2'>
-</div>
+<hr>
 
 <div class="row epiceditor_container">
 <div id="epiceditor"></div>
 </div>
-<div class="row">
-<button type="button" id="btn-deploy" class="btn btn-info btn-lg" data-toggle="modal" data-target="#stackDeploy">Deploy</button>
-</div>
 
-
-
-
-                                                </div>
-
-                                                <div id="template" class="tab-pane fade">
+<hr>
+<button id="deploy-btn" class="btn btn-primary">
+<i class="ace-icon fa fa-flask align-top bigger-125"></i>
+Deploy</button>
 
 
 
@@ -725,44 +718,6 @@ Package:
 		</div><!-- /.main-container -->
 
 
-<!-- pop up , stack deploy -->
-<div id="stackDeploy" class="modal fade modeless" data-backdrop="false" aria-hidden="true" role="dialog">
-  <div class="modal-dialog modal-lg">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Deploy Package</h4>
-      </div>
-      <div class="modal-body">
-
-    <div id="bpmn_container">
-    <div id="bpmn"></div>
-    </div>
-
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label no-padding-right" for="form-field-tags">Overriding Environment</label>
-
-        <div class="col-sm-9">
-            <div class="inline">
-                <input type="text" name="tags" id="form-field-tags" value="Key1=Value1" placeholder="Enter tags ..." />
-            </div>
-        </div>
-    </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-
-
-
 		<!-- basic scripts -->
 
 		<!--[if !IE]> -->
@@ -792,6 +747,7 @@ Package:
 		<script src="assets/js/bootstrap.min.js"></script>
 
 		<!-- page specific plugin scripts -->
+		<script src="assets/js/jquery-ui.min.js"></script>
 		<script src="assets/js/fuelux.tree.min.js"></script>
 		<script src="assets/js/bootstrap-gtreetable.js"></script>
 		<script src="assets/js/bootstrap-treeview.js"></script>
@@ -853,6 +809,7 @@ var package_dic = {};
 var version = {};
 var editor = new EpicEditor({autogrow:true}).load();
 
+
 function getTree() {
   // Some logic to retrieve, or generate tree structure
 var tree = [];
@@ -896,33 +853,12 @@ $(document).on('click', '#package_version li a', function() {
     console.log(selText);
     $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="ace-icon fa fa-caret-down icon-only"></span>');
 
-    //$('#stackDeploy').modal('modal-body').css({'height': '600px'})
-    // TODO: clean before create
-    $("#bpmn_container div").remove();
-    $('<div id="bpmn"></div>').appendTo('#bpmn_container');
-    // BPMN
-    url = version[selText];
-    // test url
-    url = 'https://raw.githubusercontent.com/pyengine/orchestra-books/master/cloud/Docker-Swarm/docker-swarm.bpmn';
-    var BpmnViewer = window.BpmnJS;
-    var viewer = new BpmnViewer({ container: $('#bpmn'), height: 500 });
-    function openFromUrl(url) {
-      $.ajax(url, { dataType : 'text' }).done(function(xml) {
-        viewer.importXML(xml, function(err) {
-          if (err) {
-            console.error(err);
-          } else {
-            viewer.get('canvas').zoom('fit-viewport');
-          }
-        });
-      });
-    }
-    openFromUrl(url);
-   
+
     // Show description (README.md)
     $('#epiceditor_container div').remove();
-    $('<div id="epiceditor"></div>').appendTo('#epiceditor_container');
- 
+    $('</div><div class="col-xs-8" id="epiceditor"></div>').appendTo('#epiceditor_container');
+
+    var template = package_dic[selText].template; 
     var desc_url = package_dic[selText].description;
     $.ajax({
         url: desc_url,
@@ -934,38 +870,16 @@ $(document).on('click', '#package_version li a', function() {
             $("html, body").animate({ scrollTop: 0 }, "slow");
         }
     });
+
+    // Deploy Stack
+    $( "#deploy-btn" ).click(function() {
+        var p_id = package_dic[selText].package_id;
+        OpenPopupCenter('deploy_stack.html?package_id='.concat(p_id), 'Workflow' , 800, 600);
+    });
+
+
+
 });
-
-// Stack environment
-var tag_input = $('#form-field-tags');
-try{
-    tag_input.tag(
-      {
-        placeholder:tag_input.attr('placeholder'),
-        //enable typeahead by specifying the source array
-        source: ace.vars['US_STATES'],//defined in ace.js >> ace.enable_search_ahead
-        /**
-        //or fetch data from database, fetch those that match "query"
-        source: function(query, process) {
-          $.ajax({url: 'remote_source.php?q='+encodeURIComponent(query)})
-          .done(function(result_items){
-            process(result_items);
-          });
-        }
-        */
-      }
-    )
-
-    //programmatically add a new
-    var $tag_obj = $('#form-field-tags').data('tag');
-    $tag_obj.add('key1=value1');
-}
-catch(e) {
-    //display a textarea for old IE, because it doesn't support this plugin or another one I tried!
-    tag_input.after('<textarea id="'+tag_input.attr('id')+'" name="'+tag_input.attr('name')+'" rows="3">'+tag_input.val()+'</textarea>').remove();
-    //$('#form-field-tags').autosize({append: "\n"});
-}
-
 
  
 $('#tree').treeview({
