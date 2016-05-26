@@ -36,6 +36,7 @@
 
 		<!-- ace settings handler -->
 		<script src="assets/js/ace-extra.min.js"></script>
+        <script type='text/javascript' src="http://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.1/jquery.xdomainrequest.min.js"></script>
 
 		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
 
@@ -51,6 +52,12 @@
             var targetWin = window.open(pageURL, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
         } 
     </script>
+
+<style>
+.highlight:not(.djs-connection) .djs-visual > :nth-child(1) {
+  fill: green !important; /* color elements as green */
+}
+</style>
 
 	</head>
 
@@ -144,6 +151,10 @@ Launch</button>
                 // end of login
            });
         jQuery(document).ready(function () {
+    var contentType ="application/x-www-form-urlencoded; charset=utf-8";
+ 
+    if(window.XDomainRequest)
+        contentType = "text/plain";
 
 
     //$('#stackDeploy').modal('modal-body').css({'height': '600px'})
@@ -154,23 +165,28 @@ Launch</button>
 
     package_id= url('?package_id');
     console.log(package_id);
-   // test url
-    //url = 'https://raw.githubusercontent.com/pyengine/orchestra-books/master/cloud/Docker-Swarm/docker-swarm.bpmn';
+    
     var BpmnViewer = window.BpmnJS;
     var viewer = new BpmnViewer({ container: $('#bpmn'), height: 500 });
+
     function openFromUrl(bpmn_url) {
-      $.ajax(bpmn_url, { dataType : 'text' }).done(function(xml) {
-        viewer.importXML(xml, function(err) {
-          if (err) {
-            console.error(err);
-          } else {
-            viewer.get('canvas').zoom('fit-viewport');
-          }
-        });
-      });
+    $.ajax({
+        url: bpmn_url,
+        type: 'GET',
+        success: function(xml) {
+            // BPMN
+                viewer.importXML(xml, function(err) {
+                    if (err) {
+                        console.error(err);
+                    } else {
+                        viewer.get('canvas').zoom('fit-viewport');
+                    }
+                })
+        }
+    });
     }
 
-
+   
     var bpmn_url;
     $.ajax({
         type: "GET",
@@ -232,7 +248,7 @@ $( "#launch-btn" ).click(function() {
         type: "POST",
         headers: {'X-Auth-Token':token},
         url: api_server.concat("/catalog/stacks"),
-        data: JSON.stringify({package_id: package_id, env: {jeju: JSON.stringify(env2)}}),
+        data: JSON.stringify({package_id: package_id, env: {jeju: env2}}),
         contentType: "application/json",
         success: function(resultData) {
             console.log(resultData);
