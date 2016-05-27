@@ -15,7 +15,6 @@
 		<!-- page specific plugin styles -->
 
 		<!-- text fonts -->
-		<link rel="stylesheet" href="assets/fonts/fonts.googleapis.com.css" />
 
 		<!-- ace styles -->
 		<link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
@@ -36,7 +35,6 @@
 
 		<!-- ace settings handler -->
 		<script src="assets/js/ace-extra.min.js"></script>
-        <script type='text/javascript' src="http://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.1/jquery.xdomainrequest.min.js"></script>
 
 		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
 
@@ -164,6 +162,8 @@ Launch</button>
     // BPMN
 
     package_id= url('?package_id');
+    var stack_id;
+
     console.log(package_id);
     
     var BpmnViewer = window.BpmnJS;
@@ -252,12 +252,56 @@ $( "#launch-btn" ).click(function() {
         contentType: "application/json",
         success: function(resultData) {
             console.log(resultData);
+            stack_id = resultData.stack_id;
+            setInterval(checkState, 10000);
         },
     });
 
 });
 
 
+function markNodeColor(workflow_state) {
+    $.ajax({
+        url: bpmn_url,
+        type: 'GET',
+        dataType: 'xml',
+        success: function(data) {
+            // Parse XML
+            var xml_node = $('bpmn\\:process', data);
+            var nodes = xml_node.find('bpmn\\:serviceTask');
+            for (var key in workflow_state) {
+                //console.log(key);
+                var state = workflow_state[key];
+                //console.log(state);
+                if (state == 'running') {
+                    // mark running color
+                    console.log(nodes.length);
+                    for (i = 0; i < nodes.length; i++) {
+                        if (nodes[i].attributes[1].nodeValue == key) {
+                            viewer.get('canvas').addMarker(nodes[i].id, 'highlight');
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+
+// State loop
+function checkState() {
+    $.ajax({
+        type: "POST",
+        headers: {'X-Auth-Token':token},
+        url: api_server.concat('/catalog/stacks/').concat(stack_id).concat('/env'),
+        data: JSON.stringify({'get':'workflow_state'}),
+        contentType: 'application/json',
+        success: function(resultData) {
+            console.log(resultData);
+            markNodeColor(resultData);
+        }
+    });
+}
 
         });
   	</script>
