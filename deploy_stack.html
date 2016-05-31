@@ -43,14 +43,6 @@
 		<script src="assets/js/respond.min.js"></script>
 		<![endif]-->
 
-    <script language="javascript" type="text/javascript">
-        function OpenPopupCenter(pageURL, title, w, h) {
-            var left = (screen.width - w) / 2;
-            var top = (screen.height - h) / 4;  // for 25% - devide by 4  |  for 33% - devide by 3
-            var targetWin = window.open(pageURL, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
-        } 
-    </script>
-
 <style>
 .highlight:not(.djs-connection) .djs-visual > :nth-child(1) {
   fill: green !important; /* color elements as green */
@@ -68,9 +60,11 @@
     </div>
 
 <hr>
+<div align="center">
 <button id="launch-btn" class="btn btn-primary">
 <i class="ace-icon fa fa-fighter-jet align-top bigger-125"></i>
 Launch</button>
+</div>
 
 		<!-- basic scripts -->
 
@@ -267,17 +261,23 @@ function markNodeColor(workflow_state) {
         dataType: 'xml',
         success: function(data) {
             // Parse XML
-            var xml_node = $('bpmn\\:process', data);
-            var nodes = xml_node.find('bpmn\\:serviceTask');
+            var xml_node = $('bpmn\\:process, process', data);
+            console.log(data);
+            console.log(xml_node);
+            var nodes = xml_node.find('bpmn\\:serviceTask, serviceTask');
+            console.log(nodes);
             for (var key in workflow_state) {
-                //console.log(key);
+                console.log(key);
                 var state = workflow_state[key];
-                //console.log(state);
+                console.log(state);
                 if (state == 'running') {
                     // mark running color
                     console.log(nodes.length);
                     for (i = 0; i < nodes.length; i++) {
+                        console.log(nodes[i].attributes[1])
+                        console.log(key)
                         if (nodes[i].attributes[1].nodeValue == key) {
+                            console.log("draw");
                             viewer.get('canvas').addMarker(nodes[i].id, 'highlight');
                         }
                     }

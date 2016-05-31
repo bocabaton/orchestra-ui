@@ -3,9 +3,9 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>Workspaces - BocaBaton</title>
+		<title>Resources - BocaBaton</title>
 
-		<meta name="description" content="Workspaces" />
+		<meta name="description" content="Stack Resources" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
 		<!-- bootstrap & fontawesome -->
@@ -29,12 +29,7 @@
 		<![endif]-->
 
 		<!-- inline styles related to this page -->
-		<link rel="stylesheet" type="text/css" href="assets/css/bootstrap-gtreetable.css" />
-		<link rel="stylesheet" type="text/css" href="assets/css/bootstrap-treeview.css" />
-
-        <!-- BPMN-JS styles -->
-        <link rel="stylesheet" href="assets/js/bpmn-js/assets/diagram-js.css" />
-        <link rel="stylesheet" href="assets/js/bpmn-js/assets/bpmn-font/css/bpmn-embedded.css" />
+		<link rel="stylesheet" type="text/css" href="assets/css/jquery.dataTables.min.css" />
 
 		<!-- ace settings handler -->
 		<script src="assets/js/ace-extra.min.js"></script>
@@ -45,15 +40,6 @@
 		<script src="assets/js/html5shiv.min.js"></script>
 		<script src="assets/js/respond.min.js"></script>
 		<![endif]-->
-
-    <script language="javascript" type="text/javascript">
-        function OpenPopupCenter(pageURL, title, w, h) {
-            var left = (screen.width - w) / 2;
-            var top = (screen.height - h) / 4;  // for 25% - devide by 4  |  for 33% - devide by 3
-            var targetWin = window.open(pageURL, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
-        } 
-    </script>
-
 	</head>
 
 	<body class="no-skin">
@@ -368,7 +354,7 @@
 								<li class="divider"></li>
 
 								<li>
-									<a href="login.html?target=iaas.html" id="logout">
+									<a href="login.html?target=stacks.html" id="logout">
 										<i class="ace-icon fa fa-power-off"></i>
 										Logout
 									</a>
@@ -430,7 +416,7 @@
 						<b class="arrow"></b>
 					</li>
 
-					<li class="">
+					<li class="active open">
 						<a href="#" class="dropdown-toggle">
 							<i class="menu-icon fa fa-desktop"></i>
 							<span class="menu-text">
@@ -444,7 +430,7 @@
 						<b class="arrow"></b>
 
 						<ul class="submenu">
-							<li class="">
+							<li class="active">
 								<a href="stacks.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									Stacks
@@ -466,7 +452,7 @@
 					    </ul>	
 					</li>
 
-					<li class="active open">
+					<li class="">
 						<a href="#" class="dropdown-toggle">
 							<i class="menu-icon fa fa-list"></i>
 							<span class="menu-text"> Workspaces </span>
@@ -477,7 +463,7 @@
 						<b class="arrow"></b>
 
 						<ul class="submenu">
-							<li class="active">
+							<li class="">
 								<a href="workspace.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 								    Catalog
@@ -524,9 +510,9 @@
 							</li>
 
 							<li>
-								<a href="#">Workspaces</a>
+								<a href="#">Resources</a>
 							</li>
-							<li class="active">Catalog</li>
+							<li class="active">Stacks</li>
 						</ul><!-- /.breadcrumb -->
 
 						<div class="nav-search" id="nav-search">
@@ -609,77 +595,30 @@
 
 						<div class="page-header">
 							<h1>
-								Workspaces
+								Resources
 								<small>
 									<i class="ace-icon fa fa-angle-double-right"></i>
-									Catalog
+									Stacks
 								</small>
 							</h1>
 						</div><!-- /.page-header -->
 
 								<!-- PAGE CONTENT BEGINS -->
 <div class="row">
-    <div class="col-xs-3">
-      <!--Sidebar content-->
-<div id="tree"></div>
-    </div>
-    <div class="col-xs-9">
 
-                                        <div class="tabbable">
-                                            <ul class="nav nav-tabs" id="myTab">
-                                                <li class="active">
-                                                    <a data-toggle="tab" href="#overview">
-                                                        <i class="green ace-icon fa fa-home bigger-120"></i>
-                                                        Overview
-                                                    </a>
-                                                </li>
-
-                                                <li>
-                                                    <a data-toggle="tab" href="#packages">
-                                                        Packages
-                                                        <span class="badge badge-danger" id="num_pkgs"></span>
-                                                    </a>
-                                                </li>
-
-                                            </ul>
-
-                                            <div class="tab-content">
-                                                <div id="overview" class="tab-pane fade in active">
-
-<dl id="dt-list" class="dl-horizontal">
-</dl>
-
-                                                </div>
-
-                                                <div id="packages" class="tab-pane fade">
-Package:  
-<div class="btn-group">
-      <a class="btn btn-sm btn-yellow dropdown-toggle btn-select2" data-toggle="dropdown" href="#">Select Version <span class="ace-icon fa fa-caret-down icon-only"></span></a>
-    <ul class="dropdown-menu dropdown-yellow" id="package_version" >
-    </ul>
-</div><!-- /.btn-group -->
-<hr>
-
-<div class="row epiceditor_container">
-<div id="epiceditor"></div>
-</div>
-
-<hr>
-<button id="deploy-btn" class="btn btn-primary">
-<i class="ace-icon fa fa-flask align-top bigger-125"></i>
-Deploy</button>
-
-
-
-                                                </div>
-
-
-
-                                            </div>
-                                        </div>
-
-      <!--Body content-->
-    </div>
+<table id="stackTable" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Portfolio</th>
+                <th>Product</th>
+                <th>Version</th>
+                <th>Stack ID</th>
+                <th>State</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+</table>
+     <!--Body content-->
 </div>
 								</div><!-- PAGE CONTENT ENDS -->
 					</div><!-- /.page-content -->
@@ -717,7 +656,6 @@ Deploy</button>
 			</a>
 		</div><!-- /.main-container -->
 
-
 		<!-- basic scripts -->
 
 		<!--[if !IE]> -->
@@ -747,24 +685,12 @@ Deploy</button>
 		<script src="assets/js/bootstrap.min.js"></script>
 
 		<!-- page specific plugin scripts -->
-		<script src="assets/js/jquery-ui.min.js"></script>
-		<script src="assets/js/fuelux.tree.min.js"></script>
-		<script src="assets/js/bootstrap-gtreetable.js"></script>
-		<script src="assets/js/bootstrap-treeview.js"></script>
-
 		<script src="assets/js/jquery.dataTables.min.js"></script>
-		<script src="assets/js/jquery.dataTables.bootstrap.min.js"></script>
-		<script src="assets/js/dataTables.tableTools.min.js"></script>
-		<script src="assets/js/dataTables.colVis.min.js"></script>
 
 		<!-- ace scripts -->
 		<script src="assets/js/ace-elements.min.js"></script>
 		<script src="assets/js/ace.min.js"></script>
 
-        <!-- BPMN-JS scripts -->
-        <script src="assets/js/bpmn-js/bpmn-viewer.js"></script>
-        <script src="assets/js/epiceditor.js"></script>
-        
 		<!-- inline scripts related to this page -->
 		<script type="text/javascript">
             var api_server = "";
@@ -783,10 +709,10 @@ Deploy</button>
                 var user_id = localStorage.getItem('user_id');
                 $('#logout').click(function() {
                     localStorage.removeItem('token');
-                    window.location = "login.html?target=iaas.html";
+                    window.location = "login.html?target=stacks.html";
                 });
                 if(token) {}
-                else {window.location = "login.html?target=iaas.html"}
+                else {window.location = "login.html?target=stacks.html"}
                 console.log(token);
                 console.log(api_server); 
                 var user_name = $.ajax({
@@ -801,157 +727,33 @@ Deploy</button>
                 });
                 // end of login
            });
+
+
+// Start of document ready
         jQuery(document).ready(function () {
 
-var portfolio_dic = {};
-var product_dic = {};
-var package_dic = {};
-var version = {};
-var editor = new EpicEditor({autogrow:true}).load();
+var stack_list = [];
 
 
-function getTree() {
-  // Some logic to retrieve, or generate tree structure
-var tree = [];
 $.ajax({
-    url : api_server.concat('/catalog/portfolios'),
-    async: false,
-    headers: {
-        'X-Auth-Token' : token
-    },
+    url: api_server.concat('/catalog/stacks?detail'),
+    headers: {'X-Auth-token':token},
     contentType: 'application/json',
     type: 'GET',
     success: function(data) {
-        for(i = 0; i < data.total_count; i++) {
-            var tree2 = [];
-            $.ajax({
-                url : api_server.concat('/catalog/products?portfolio_id=').concat(data.results[i].portfolio_id),
-                async: false,
-                headers: {'X-Auth-Token':token},
-                contentType: 'application/json',
-                type: 'GET',
-                success: function(data) {
-                    // add product
-                    console.log(data);
-                    for(j = 0; j < data.total_count; j++) {
-                        tree2.push({text:data.results[j].name});
-                        product_dic[data.results[j].name] = data.results[j].product_id;
-                    }
-                }
-            });
-            portfolio_dic[data.results[i].name] = data.results[i].portfolio_id;
-            tree.push({text:data.results[i].name,state: {expanded:false},  nodes: tree2});
-        }
-    }
-}); 
-    return tree;
-};
-
-
-$(document).on('click', '#package_version li a', function() {
-    var selText = $(this).text();
-    console.log(selText);
-    $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="ace-icon fa fa-caret-down icon-only"></span>');
-
-
-    // Show description (README.md)
-    $('#epiceditor_container div').remove();
-    $('</div><div class="col-xs-8" id="epiceditor"></div>').appendTo('#epiceditor_container');
-
-    var template = package_dic[selText].template; 
-    var desc_url = package_dic[selText].description;
-    $.ajax({
-        url: desc_url,
-        type: 'GET',
-        success: function(data) {
-            // Markdown
-            editor.importFile('/tmp/workspace.md',data);
-            editor.preview();
-            $("html, body").animate({ scrollTop: 0 }, "slow");
-        }
-    });
-
-    // Deploy Stack
-    $( "#deploy-btn" ).click(function() {
-        var p_id = package_dic[selText].package_id;
-        OpenPopupCenter('deploy_stack.html?package_id='.concat(p_id), 'Workflow' , 800, 800);
-    });
-
-
-
-});
-
- 
-$('#tree').treeview({
-    data: getTree(),
-    onNodeSelected: function(event, data) {
         console.log(data);
-        if (data.hasOwnProperty('parentId') == true) {
-            console.log("product")
-            $.ajax({
-                url: api_server.concat('/catalog/products/').concat(product_dic[data.text]),
-                headers: {'X-Auth-Token': token},
-                contentType: 'application/json',
-                type: 'GET',
-                success: function(data) {
-                    $("#dt-list dt").remove();
-                    $("#dt-list dd").remove();
-                    $('<dt>Product Name</dt><dd>' + data.name + '</dd>'
-                    + '<dt>Short Description</dt><dd>' + data.short_description + '</dd>'
-                    + '<dt>Description</dt><dd>' + data.description + '</dd>'
-                    + '<dt>Vendor</dt><dd>' + data.vendor + '</dd>'
-                    + '<dt>Provided by</dt><dd>' + data.provided_by + '</dd>'
-                    + '<dt>Created</dt><dd>' + data.created + '</dd>'
-                    ).appendTo('#dt-list');
-
-                    $("#package_version li").remove();
-                    package_dic = {};
-
-                    // Call packages
-                    $.ajax({
-                        url: api_server.concat('/catalog/packages?product_id=').concat(data.product_id),
-                        headers: {'X-Auth-Token': token},
-                        contentType: 'application/json',
-                        type: 'GET',
-                        success: function(data) {
-                            console.log(data);
-                            $('#num_pkgs').text(data.total_count);
-                            for(i = 0; i < data.total_count; i++) {
-                                package_dic[data.results[i].version] = data.results[i];
-                                version[data.results[i].version] = data.results[i].template;
-                                $('<li><a href="#">' + data.results[i].version + '</a></li>').appendTo('#package_version');
-                            }
-                        }
-                    });
-
-                }
-
-
-            });
-        } else {
-            console.log("catalog")
-            $('#num_pkgs').text("");
-            $.ajax({
-                url: api_server.concat('/catalog/portfolios/').concat(portfolio_dic[data.text]),
-                headers: {'X-Auth-Token': token},
-                contentType: 'application/json',
-                type: 'GET',
-                success: function(data) {
-                    $("#dt-list dt").remove();
-                    $("#dt-list dd").remove();
-                    $('<dt>Portfolio Name</dt><dd>' + data.name + '</dd>'
-                    + '<dt>Owner</dt><dd>' + data.owner + '</dd>'
-                    + '<dt>Description</dt><dd>' + data.description + '</dd>'
-                    + '<dt>Created</dt><dd>' + data.created + '</dd>'
-                    ).appendTo('#dt-list');
-                }
-            });
+        stack_list = [];
+        for(i = 0; i < data.total_count; i++) {
+            stack_list.push([data.results[i].detail.portfolio.name, data.results[i].detail.product.name,
+                data.results[i].detail.package.version,
+                data.results[i].stack_id,
+                data.results[i].state,
+                data.results[i].created]);
         }
+        $('#stackTable').DataTable({destroy:true, data:stack_list});
     }
-});
-
-
-
+})
+        
         });
   	</script>
     

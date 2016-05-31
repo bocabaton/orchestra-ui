@@ -31,6 +31,7 @@
 		<!-- inline styles related to this page -->
 		<link rel="stylesheet" type="text/css" href="assets/css/bootstrap-gtreetable.css" />
 		<link rel="stylesheet" type="text/css" href="assets/css/bootstrap-treeview.css" />
+		<link rel="stylesheet" type="text/css" href="assets/css/jquery.dataTables.min.css" />
 
 		<!-- ace settings handler -->
 		<script src="assets/js/ace-extra.min.js"></script>
@@ -467,7 +468,7 @@
 							<li class="">
 								<a href="workspace.html">
 									<i class="menu-icon fa fa-caret-right"></i>
-								    Workspace
+								    Catalog
 								</a>
 
 								<b class="arrow"></b>
@@ -513,7 +514,7 @@
 							<li>
 								<a href="#">Resources</a>
 							</li>
-							<li class="active">Simple &amp; Dynamic</li>
+							<li class="active">Infrastructure</li>
 						</ul><!-- /.breadcrumb -->
 
 						<div class="nav-search" id="nav-search">
@@ -599,7 +600,7 @@
 								Resources
 								<small>
 									<i class="ace-icon fa fa-angle-double-right"></i>
-									Intrastructure
+									Infrastructure
 								</small>
 							</h1>
 						</div><!-- /.page-header -->
@@ -622,9 +623,9 @@
                                                 </li>
 
                                                 <li>
-                                                    <a data-toggle="tab" href="#messages">
+                                                    <a data-toggle="tab" href="#zones">
                                                         Instrances
-                                                        <span class="badge badge-danger">4</span>
+                                                        <span class="badge badge-danger" id="num_servers"></span>
                                                     </a>
                                                 </li>
 
@@ -640,34 +641,26 @@
                                                 <div id="home" class="tab-pane fade in active">
 
 
-<dl id="dt-list-1" class="dl-horizontal">
-    <dt>Description lists</dt>
-    <dd>A description list is perfect for defining terms.</dd>
-    <dt>Euismod</dt>
-    <dd>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.</dd>
-    <dd>Donec id elit non mi porta gravida at eget metus.</dd>
-    <dt>Malesuada porta</dt>
-    <dd>Etiam porta sem malesuada magna mollis euismod.</dd>
-    <dt>Felis euismod semper eget lacinia</dt>
-    <dd>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</dd>
+<dl id="dt-list" class="dl-horizontal">
 </dl>
 
 
-
-                                                    <p>Raw denim you probably haven't heard of them jean shorts Austin.</p>
                                                 </div>
 
-                                                <div id="messages" class="tab-pane fade">
-                                                    <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.</p>
+                                                <div id="zones" class="tab-pane fade">
+<table id="instanceTable" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Server ID</th>
+            </tr>
+        </thead>
+</table>
                                                 </div>
 
-                                                <div id="dropdown1" class="tab-pane fade">
-                                                    <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade.</p>
-                                                </div>
 
-                                                <div id="dropdown2" class="tab-pane fade">
-                                                    <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin.</p>
-                                                </div>
+
+
                                             </div>
                                         </div>
 
@@ -788,7 +781,16 @@
                 });
                 // end of login
            });
+
+
+// Start of document ready
         jQuery(document).ready(function () {
+
+var region_dic = {};
+var zone_dic = {};
+var server_dic = {};
+var server_table = {};
+var server_list = [];
 
 function getTree() {
   // Some logic to retrieve, or generate tree structure
@@ -815,9 +817,11 @@ $.ajax({
                     // add zones
                     for(j = 0; j < data.total_count; j++) {
                         tree2.push({text:data.results[j].name});
+                        zone_dic[data.results[j].name] = data.results[j].zone_id;
                     }
                 }
             });
+            region_dic[data.results[i].name] = data.results[i].region_id;
             tree.push({text:data.results[i].name,state: {expanded:false},  nodes: tree2});
         }
     }
@@ -830,15 +834,67 @@ $('#tree').treeview({
     onNodeSelected: function(event, data) {
         console.log(data);
         if (data.hasOwnProperty('parentId') == true) {
-            console.log("zone");
-            // List Servers
-        }
-        else {
-            console.log("region");
-        }
+            console.log("zones")
+            $.ajax({
+                url: api_server.concat('/provisioning/zones/').concat(zone_dic[data.text]),
+                headers: {'X-Auth-Token': token},
+                contentType: 'application/json',
+                type: 'GET',
+                success: function(data) {
+                    $("#dt-list dt").remove();
+                    $("#dt-list dd").remove();
+                    $('<dt>Zone Name</dt><dd>' + data.name + '</dd>'
+                    + '<dt>Platform</dt><dd>' + data.zone_type + '</dd>'
+                    + '<dt>Zone ID</dt><dd>' + data.zone_id + '</dd>'
+                    ).appendTo('#dt-list');
+
+                    // Call servers
+                    $.ajax({
+                        url: api_server.concat('/provisioning/servers?zone_id=').concat(data.zone_id),
+                        headers: {'X-Auth-Token': token},
+                        contentType: 'application/json',
+                        type: 'GET',
+                        success: function(data) {
+                            console.log(data);
+                            server_list = [];
+                            $('#num_servers').text(data.total_count);
+                            for( i = 0; i < data.total_count; i++) {
+                                server_list.push([data.results[i].name, data.results[i].server_id]);
+                            }
+                            server_table[data] = server_list;
+                            console.log(server_list);
+                            $('#instanceTable').DataTable({destroy:true, data:server_list});
+                        }
+                    });
+
+                }
+
+
+            });
+        } else {
+            console.log("regions")
+            $('#num_servers').text("");
+            $.ajax({
+                url: api_server.concat('/provisioning/regions/').concat(region_dic[data.text]),
+                headers: {'X-Auth-Token': token},
+                contentType: 'application/json',
+                type: 'GET',
+                success: function(data) {
+                    $("#dt-list dt").remove();
+                    $("#dt-list dd").remove();
+                    $('<dt>Region Name</dt><dd>' + data.name + '</dd>'
+                    ).appendTo('#dt-list');
+                }
+            });
+        }       
+
+ 
     }
 });
 
+
+<!-- Instance Table -->
+$('#instanceTable').DataTable();
         
         });
   	</script>
