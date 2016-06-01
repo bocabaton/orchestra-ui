@@ -177,32 +177,41 @@
                                             <div class="space-6"></div>
                                             <p> Enter your details to begin: </p>
 
-                                            <form>
+                                            <form id="register">
                                                 <fieldset>
-                                                    <label class="block clearfix">
-                                                        <span class="block input-icon input-icon-right">
-                                                            <input type="email" class="form-control" placeholder="Email" />
-                                                            <i class="ace-icon fa fa-envelope"></i>
-                                                        </span>
-                                                    </label>
 
                                                     <label class="block clearfix">
                                                         <span class="block input-icon input-icon-right">
-                                                            <input type="text" class="form-control" placeholder="Username" />
+                                                            <input type="text" id="r_user_id" class="form-control" placeholder="User ID" />
                                                             <i class="ace-icon fa fa-user"></i>
                                                         </span>
                                                     </label>
 
                                                     <label class="block clearfix">
                                                         <span class="block input-icon input-icon-right">
-                                                            <input type="password" class="form-control" placeholder="Password" />
+                                                            <input type="text" id="r_name" class="form-control" placeholder="Name" />
+                                                            <i class="ace-icon fa fa-user"></i>
+                                                        </span>
+                                                    </label>
+
+
+                                                    <label class="block clearfix">
+                                                        <span class="block input-icon input-icon-right">
+                                                            <input type="email" id="r_email" class="form-control" placeholder="Email" />
+                                                            <i class="ace-icon fa fa-envelope"></i>
+                                                        </span>
+                                                    </label>
+
+                                                    <label class="block clearfix">
+                                                        <span class="block input-icon input-icon-right">
+                                                            <input type="password" id="r_password1" class="form-control" placeholder="Password" />
                                                             <i class="ace-icon fa fa-lock"></i>
                                                         </span>
                                                     </label>
 
                                                     <label class="block clearfix">
                                                         <span class="block input-icon input-icon-right">
-                                                            <input type="password" class="form-control" placeholder="Repeat password" />
+                                                            <input type="password" id="r_password2" class="form-control" placeholder="Repeat password" />
                                                             <i class="ace-icon fa fa-retweet"></i>
                                                         </span>
                                                     </label>
@@ -223,7 +232,7 @@
                                                             <span class="bigger-110">Reset</span>
                                                         </button>
 
-                                                        <button type="button" class="width-65 pull-right btn btn-sm btn-success">
+                                                        <button type="button" id="register-btn" class="width-65 pull-right btn btn-sm btn-success">
                                                             <span class="bigger-110">Register</span>
 
                                                             <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
@@ -265,7 +274,8 @@
 
         <!-- basic scripts -->
 
-<script src="assets/js/url.js"></script>
+        <script src="assets/js/url.js"></script>
+        <script src="assets/js/jquery.form.js"></script>
 
         <!--[if !IE]> -->
         <script src="assets/js/jquery.2.1.1.min.js"></script>
@@ -293,6 +303,8 @@
         </script>
 
         <!-- inline scripts related to this page -->
+
+
         <script type="text/javascript">
             jQuery(function($) {
              $(document).on('click', '.toolbar a[data-target]', function(e) {
@@ -355,7 +367,30 @@
                 
                 e.preventDefault();
              });
-             
+            
+            $(document).ready(function() {
+                $('#register-btn').on('click', function() {
+                    console.log('register');
+                    var r_user_id=$('#r_user_id').val();
+                    var r_name=$('#r_name').val();
+                    var r_email=$('#r_email').val();
+                    var r_password1=$('#r_password1').val();
+                    var r_password2=$('#r_password2').val();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/api/v1/users",
+                        data: JSON.stringify({user_id:r_user_id,password:r_password1, name:r_name, email:r_email}),
+                        contentType: "application/json",
+                        success: function(resultData) {
+                            console.log(resultData);
+                            window.location = "login.html";
+                        }
+                    });
+     
+                });
+            });
+ 
             });
         </script>
     </body>

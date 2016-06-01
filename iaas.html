@@ -466,18 +466,9 @@
 
 						<ul class="submenu">
 							<li class="">
-								<a href="workspace.html">
+								<a href="catalog.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 								    Catalog
-								</a>
-
-								<b class="arrow"></b>
-							</li>
-
-							<li class="">
-								<a href="workflow.html">
-									<i class="menu-icon fa fa-caret-right"></i>
-								    Workflow
 								</a>
 
 								<b class="arrow"></b>
@@ -629,12 +620,7 @@
                                                     </a>
                                                 </li>
 
-                                                <li>
-                                                    <a data-toggle="tab" href="#">
-                                                        Monitoring
-                                                        <i class="ace-icon"></i>
-                                                    </a>
-                                                </li>
+
                                             </ul>
 
                                             <div class="tab-content">
@@ -782,6 +768,7 @@
                 // end of login
            });
 
+            $($("#myTab").find("li")[1]).hide();
 
 // Start of document ready
         jQuery(document).ready(function () {
@@ -835,6 +822,7 @@ $('#tree').treeview({
         console.log(data);
         if (data.hasOwnProperty('parentId') == true) {
             console.log("zones")
+            $($("#myTab").find("li")[1]).show();
             $.ajax({
                 url: api_server.concat('/provisioning/zones/').concat(zone_dic[data.text]),
                 headers: {'X-Auth-Token': token},
@@ -874,6 +862,7 @@ $('#tree').treeview({
         } else {
             console.log("regions")
             $('#num_servers').text("");
+            $($("#myTab").find("li")[1]).hide();
             $.ajax({
                 url: api_server.concat('/provisioning/regions/').concat(region_dic[data.text]),
                 headers: {'X-Auth-Token': token},
