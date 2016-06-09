@@ -3,9 +3,9 @@
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 		<meta charset="utf-8" />
-		<title>Resources - BocaBaton</title>
+		<title>User Profile - BocaBaton</title>
 
-		<meta name="description" content="Infrastructure Resources" />
+		<meta name="description" content="User Profile" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
 		<!-- bootstrap & fontawesome -->
@@ -29,8 +29,6 @@
 		<![endif]-->
 
 		<!-- inline styles related to this page -->
-		<link rel="stylesheet" type="text/css" href="assets/css/bootstrap-gtreetable.css" />
-		<link rel="stylesheet" type="text/css" href="assets/css/bootstrap-treeview.css" />
 		<link rel="stylesheet" type="text/css" href="assets/css/jquery.dataTables.min.css" />
 
 		<!-- ace settings handler -->
@@ -356,7 +354,7 @@
 								<li class="divider"></li>
 
 								<li>
-									<a href="login.html?target=iaas.html" id="logout">
+									<a href="login.html?target=stacks.html" id="logout">
 										<i class="ace-icon fa fa-power-off"></i>
 										Logout
 									</a>
@@ -418,7 +416,7 @@
 						<b class="arrow"></b>
 					</li>
 
-					<li class="active open">
+					<li class="">
 						<a href="#" class="dropdown-toggle">
 							<i class="menu-icon fa fa-desktop"></i>
 							<span class="menu-text">
@@ -441,7 +439,7 @@
 								<b class="arrow"></b>
 							</li>
 
-							<li class="active">
+							<li class="">
 								<a href="iaas.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 									IaaS
@@ -479,8 +477,7 @@
 					</li>
 
 
-
-					<li class="">
+					<li class="active open">
 						<a href="#" class="dropdown-toggle">
 							<i class="menu-icon fa fa-users"></i>
 							<span class="menu-text"> Account </span>
@@ -491,7 +488,7 @@
 						<b class="arrow"></b>
 
 						<ul class="submenu">
-							<li class="">
+							<li class="active">
 								<a href="profile.html">
 									<i class="menu-icon fa fa-caret-right"></i>
 								    User Profile
@@ -503,9 +500,6 @@
 
 						</ul>
 					</li>
-
-
-
     			</ul><!-- /.nav-list -->
 
 
@@ -532,9 +526,9 @@
 							</li>
 
 							<li>
-								<a href="#">Resources</a>
+								<a href="#">Account</a>
 							</li>
-							<li class="active">Infrastructure</li>
+							<li class="active">User Profile</li>
 						</ul><!-- /.breadcrumb -->
 
 						<div class="nav-search" id="nav-search">
@@ -617,71 +611,213 @@
 
 						<div class="page-header">
 							<h1>
-								Resources
+								Account
 								<small>
 									<i class="ace-icon fa fa-angle-double-right"></i>
-									Infrastructure
+									User Profile
 								</small>
 							</h1>
 						</div><!-- /.page-header -->
 
 								<!-- PAGE CONTENT BEGINS -->
-<div class="row">
-    <div class="col-xs-3">
-      <!--Sidebar content-->
-<div id="tree"></div>
-    </div>
-    <div class="col-xs-9">
-
-                                        <div class="tabbable">
-                                            <ul class="nav nav-tabs" id="myTab">
-                                                <li class="active">
-                                                    <a data-toggle="tab" href="#home">
-                                                        <i class="green ace-icon fa fa-home bigger-120"></i>
-                                                        Overview
-                                                    </a>
-                                                </li>
-
-                                                <li>
-                                                    <a data-toggle="tab" href="#zones">
-                                                        Instrances
-                                                        <span class="badge badge-danger" id="num_servers"></span>
-                                                    </a>
-                                                </li>
 
 
-                                            </ul>
+<div>
+                                    <div id="user-profile-1" class="user-profile row">
+                                        <div class="col-xs-12 col-sm-3 center">
+                                            <div>
+                                                <span class="profile-picture">
+                                                    <img id="avatar" class="editable img-responsive" alt="Alex's Avatar" src="assets/avatars/profile-pic.jpg" />
+                                                </span>
 
-                                            <div class="tab-content">
-                                                <div id="home" class="tab-pane fade in active">
+                                                <div class="space-4"></div>
 
+                                                <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
+                                                    <div class="inline position-relative">
+                                                        <a href="#" class="user-title-label dropdown-toggle" data-toggle="dropdown">
+                                                            <i class="ace-icon fa fa-circle light-green"></i>
+                                                            &nbsp;
+                                                            <span class="white" id="username2"></span>
+                                                        </a>
 
-<dl id="dt-list" class="dl-horizontal">
-</dl>
-
-
+                                                    </div>
                                                 </div>
+                                            </div>
 
-                                                <div id="zones" class="tab-pane fade">
-<table id="instanceTable" class="display" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Server ID</th>
-            </tr>
-        </thead>
-</table>
-                                                </div>
+                                            <div class="space-6"></div>
 
 
+                                        </div>
+
+                                        <div class="col-xs-12 col-sm-9">
+                                            <div class="center">
+                                                <span class="btn btn-app btn-sm btn-light no-hover">
+                                                    <span class="line-height-1 bigger-170 blue"> - </span>
+
+                                                    <br />
+                                                    <span class="line-height-1 smaller-90"> Activities </span>
+                                                </span>
+
+                                                <span class="btn btn-app btn-sm btn-success no-hover">
+                                                    <span class="line-height-1 bigger-170"> - </span>
+
+                                                    <br />
+                                                    <span class="line-height-1 smaller-90"> Stacks </span>
+                                                </span>
+
+                                                <span class="btn btn-app btn-sm btn-info no-hover">
+                                                    <span class="line-height-1 bigger-170"> - </span>
+
+                                                    <br />
+                                                    <span class="line-height-1 smaller-90"> Instances </span>
+                                                </span>
+
+
+                                                <span class="btn btn-app btn-sm btn-pink no-hover">
+                                                    <span class="line-height-1 bigger-170"> 0 </span>
+
+                                                    <br />
+                                                    <span class="line-height-1 smaller-90"> Identities </span>
+                                                </span>
+
+
+
+                                                <span class="btn btn-app btn-sm btn-pink no-hover">
+                                                    <span class="line-height-1 bigger-170"> 0 </span>
+
+                                                    <br />
+                                                    <span class="line-height-1 smaller-90"> Keypairs </span>
+                                                </span>
 
 
                                             </div>
-                                        </div>
 
-      <!--Body content-->
-    </div>
-</div>
+                                            <div class="space-12"></div>
+
+                                            <div class="profile-user-info profile-user-info-striped">
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> Username </div>
+
+                                                    <div class="profile-info-value">
+                                                        <span class="editable" id="u-username"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> User ID </div>
+
+                                                    <div class="profile-info-value">
+                                                        <span class="editable" id="u-userid"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> E-mail </div>
+
+                                                    <div class="profile-info-value">
+                                                        <span class="editable" id="u-email"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> Language </div>
+
+                                                    <div class="profile-info-value">
+                                                        <span class="editable" id="u-language"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> Timezone </div>
+
+                                                    <div class="profile-info-value">
+                                                        <span class="editable" id="u-timezone"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> State </div>
+
+                                                    <div class="profile-info-value">
+                                                        <span class="editable" id="u-state"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="profile-info-row">
+                                                    <div class="profile-info-name"> Created </div>
+
+                                                    <div class="profile-info-value">
+                                                        <span class="editable" id="u-created"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="space-20"></div>
+
+                                            <div class="widget-box transparent">
+                                                <div class="widget-header widget-header-small">
+                                                    <h4 class="widget-title blue smaller">
+                                                        <i class="ace-icon fa fa-rss orange"></i>
+                                                        Recent Activities
+                                                    </h4>
+
+                                                    <div class="widget-toolbar action-buttons">
+                                                        <a href="#" data-action="reload">
+                                                            <i class="ace-icon fa fa-refresh blue"></i>
+                                                        </a>
+&nbsp;
+                                                        <a href="#" class="pink">
+                                                            <i class="ace-icon fa fa-trash-o"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="widget-body">
+                                                    <div class="widget-main padding-8">
+                                                        <div id="profile-feed-1" class="profile-feed">
+                                                            <div class="profile-activity clearfix">
+                                                                <div>
+                                                                    <img class="pull-left" alt="Alex Doe's avatar" src="assets/avatars/avatar5.png" />
+                                                                    <a class="user" href="#"> admin </a>
+                                                                    changed his profile photo.(sample text)
+                                                                    <a href="#">Take a look</a>
+
+                                                                    <div class="time">
+                                                                        <i class="ace-icon fa fa-clock-o bigger-110"></i>
+                                                                        an hour ago
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="tools action-buttons">
+                                                                    <a href="#" class="blue">
+                                                                        <i class="ace-icon fa fa-pencil bigger-125"></i>
+                                                                    </a>
+
+                                                                    <a href="#" class="red">
+                                                                        <i class="ace-icon fa fa-times bigger-125"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+
+
+
+     <!--Body content-->
 								</div><!-- PAGE CONTENT ENDS -->
 					</div><!-- /.page-content -->
 				</div>
@@ -747,14 +883,6 @@
 		<script src="assets/js/bootstrap.min.js"></script>
 
 		<!-- page specific plugin scripts -->
-		<script src="assets/js/fuelux.tree.min.js"></script>
-		<script src="assets/js/bootstrap-gtreetable.js"></script>
-		<script src="assets/js/bootstrap-treeview.js"></script>
-
-		<script src="assets/js/jquery.dataTables.min.js"></script>
-		<script src="assets/js/jquery.dataTables.bootstrap.min.js"></script>
-		<script src="assets/js/dataTables.tableTools.min.js"></script>
-		<script src="assets/js/dataTables.colVis.min.js"></script>
 
 		<!-- ace scripts -->
 		<script src="assets/js/ace-elements.min.js"></script>
@@ -778,10 +906,10 @@
                 var user_id = localStorage.getItem('user_id');
                 $('#logout').click(function() {
                     localStorage.removeItem('token');
-                    window.location = "login.html?target=iaas.html";
+                    window.location = "login.html?target=profile.html";
                 });
                 if(token) {}
-                else {window.location = "login.html?target=iaas.html"}
+                else {window.location = "login.html?target=profile.html"}
                 console.log(token);
                 console.log(api_server); 
                 var user_name = $.ajax({
@@ -792,127 +920,23 @@
                     success: function(resultData) {
                         console.log(resultData);
                         $('#user-name').text(resultData.user_id);
+                        $('#username2').text(resultData.user_id);
+                        $('#u-username').text(resultData.name);
+                        $('#u-userid').text(resultData.user_id);
+                        $('#u-email').text(resultData.email);
+                        $('#u-language').text(resultData.language);
+                        $('#u-timezone').text(resultData.timezone);
+                        $('#u-state').text(resultData.state);
+                        $('#u-created').text(resultData.created);
                     },
                 });
                 // end of login
            });
 
-            $($("#myTab").find("li")[1]).hide();
 
 // Start of document ready
         jQuery(document).ready(function () {
 
-var region_dic = {};
-var zone_dic = {};
-var server_dic = {};
-var server_table = {};
-var server_list = [];
-
-function getTree() {
-  // Some logic to retrieve, or generate tree structure
-var tree = [];
-
-$.ajax({
-    url : api_server.concat('/provisioning/regions'),
-    async: false,
-    headers: {
-        'X-Auth-Token' : token
-    },
-    contentType: 'application/json',
-    type: 'GET',
-    success: function(data) {
-        for(i = 0; i < data.total_count; i++) {
-            var tree2 = [];
-            $.ajax({
-                url : api_server.concat('/provisioning/zones?region_id=').concat(data.results[i].region_id),
-                async: false,
-                headers: {'X-Auth-Token':token},
-                contentType: 'application/json',
-                type: 'GET',
-                success: function(data) {
-                    // add zones
-                    for(j = 0; j < data.total_count; j++) {
-                        tree2.push({text:data.results[j].name});
-                        zone_dic[data.results[j].name] = data.results[j].zone_id;
-                    }
-                }
-            });
-            region_dic[data.results[i].name] = data.results[i].region_id;
-            tree.push({text:data.results[i].name,state: {expanded:false},  nodes: tree2});
-        }
-    }
-}); 
-    return tree;
-};
-
-$('#tree').treeview({
-    data: getTree(),
-    onNodeSelected: function(event, data) {
-        console.log(data);
-        if (data.hasOwnProperty('parentId') == true) {
-            console.log("zones")
-            $($("#myTab").find("li")[1]).show();
-            $.ajax({
-                url: api_server.concat('/provisioning/zones/').concat(zone_dic[data.text]),
-                headers: {'X-Auth-Token': token},
-                contentType: 'application/json',
-                type: 'GET',
-                success: function(data) {
-                    $("#dt-list dt").remove();
-                    $("#dt-list dd").remove();
-                    $('<dt>Zone Name</dt><dd>' + data.name + '</dd>'
-                    + '<dt>Platform</dt><dd>' + data.zone_type + '</dd>'
-                    + '<dt>Zone ID</dt><dd>' + data.zone_id + '</dd>'
-                    ).appendTo('#dt-list');
-
-                    // Call servers
-                    $.ajax({
-                        url: api_server.concat('/provisioning/servers?zone_id=').concat(data.zone_id),
-                        headers: {'X-Auth-Token': token},
-                        contentType: 'application/json',
-                        type: 'GET',
-                        success: function(data) {
-                            console.log(data);
-                            server_list = [];
-                            $('#num_servers').text(data.total_count);
-                            for( i = 0; i < data.total_count; i++) {
-                                server_list.push([data.results[i].name, data.results[i].server_id]);
-                            }
-                            server_table[data] = server_list;
-                            console.log(server_list);
-                            $('#instanceTable').DataTable({destroy:true, data:server_list});
-                        }
-                    });
-
-                }
-
-
-            });
-        } else {
-            console.log("regions")
-            $('#num_servers').text("");
-            $($("#myTab").find("li")[1]).hide();
-            $.ajax({
-                url: api_server.concat('/provisioning/regions/').concat(region_dic[data.text]),
-                headers: {'X-Auth-Token': token},
-                contentType: 'application/json',
-                type: 'GET',
-                success: function(data) {
-                    $("#dt-list dt").remove();
-                    $("#dt-list dd").remove();
-                    $('<dt>Region Name</dt><dd>' + data.name + '</dd>'
-                    ).appendTo('#dt-list');
-                }
-            });
-        }       
-
- 
-    }
-});
-
-
-<!-- Instance Table -->
-$('#instanceTable').DataTable();
         
         });
   	</script>
