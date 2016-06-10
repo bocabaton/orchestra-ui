@@ -775,27 +775,16 @@
                                                 <div class="widget-body">
                                                     <div class="widget-main padding-8">
                                                         <div id="profile-feed-1" class="profile-feed">
+
                                                             <div class="profile-activity clearfix">
                                                                 <div>
                                                                     <img class="pull-left" alt="Alex Doe's avatar" src="assets/avatars/avatar5.png" />
                                                                     <a class="user" href="#"> admin </a>
                                                                     changed his profile photo.(sample text)
-                                                                    <a href="#">Take a look</a>
-
                                                                     <div class="time">
                                                                         <i class="ace-icon fa fa-clock-o bigger-110"></i>
                                                                         an hour ago
                                                                     </div>
-                                                                </div>
-
-                                                                <div class="tools action-buttons">
-                                                                    <a href="#" class="blue">
-                                                                        <i class="ace-icon fa fa-pencil bigger-125"></i>
-                                                                    </a>
-
-                                                                    <a href="#" class="red">
-                                                                        <i class="ace-icon fa fa-times bigger-125"></i>
-                                                                    </a>
                                                                 </div>
                                                             </div>
 
@@ -812,7 +801,7 @@
 
 
 
-<!-- Modal -->
+<!-- Modal identities -->
 <div id="add-identities" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -830,7 +819,8 @@
 
                             <div>
                                 <select class="chosen-select" id="chosen-platform" data-placeholder="Choose a Platform type...">
-                                    <option value="aws" selected="selected">aws</option>
+                                    <option value=""></option>
+                                    <option value="aws">aws</option>
                                     <option value="openstack">openstack</option>
                                 </select>
                             </div>
@@ -843,7 +833,7 @@
                             <label for="form-field-username">AWS Access Key ID</label>
 
                             <div>
-                                <input type="text" id="form-field-access-key" placeholder="access-key-id" value="xxx-xxx-xxx-xxx" />
+                                <input type="text" size="20" id="form-field-access-key" placeholder="access-key-id" />
                             </div>
                         </div>
 
@@ -853,7 +843,7 @@
                             <label for="form-field-first">AWS Secret Access Key</label>
 
                             <div>
-                                <input type="text" id="form-field-secret-access-key" placeholder="secret-access-key" value="xxx-xxx-xxx-xxxx-xxxx" />
+                                <input type="text" size="40" id="form-field-secret-access-key" placeholder="secret-access-key" />
                             </div>
                         </div>
 </div>
@@ -897,7 +887,7 @@
             <div class="modal-footer">
                 <button class="btn btn-sm" data-dismiss="modal">
                     <i class="ace-icon fa fa-times"></i>
-                    Cancel
+                    Close
                 </button>
 
                 <button class="btn btn-sm btn-primary" id="save-identity">
@@ -908,6 +898,67 @@
         </div>
     </div>
 </div>
+
+
+
+<!-- Modal keypairs -->
+<div id="add-keypairs" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="blue bigger">Add Keypair</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-7">
+
+                        <div class="space-4"></div>
+
+<div id='form-aws'>
+                        <div class="form-group">
+                            <label for="form-field-username">Keypair name</label>
+
+                            <div>
+                                <input type="text" size="20" id="form-field-keypair-name" placeholder="Keypair name" />
+                            </div>
+                        </div>
+
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label for="form-field-first">ID RSA private key content</label>
+
+                            <div>
+                                <textarea name="comment" rows="30" cols="78" id="keypair-content" placeholder="Enter key content here..."></textarea>
+                            </div>
+                        </div>
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    Close
+                </button>
+
+                <button class="btn btn-sm btn-primary" id="save-keypair">
+                    <i class="ace-icon fa fa-check"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 
 
@@ -1038,9 +1089,14 @@ var selText;
 $(document).on('click', '#identities', function() {
         console.log("Add Identities");
         $('#add-identities').modal('show');
-        $('#form-aws').show();
+        $('#form-aws').hide();
         $('#form-openstack').hide();
  
+});
+
+$(document).on('click', '#keypairs', function() {
+    console.log("Add Keypairs");
+    $('#add-keypairs').modal('show');
 });
 
 $(document).on('click', '#chosen-platform', function() {
@@ -1067,9 +1123,10 @@ $(document).on('click', '#save-identity', function() {
             headers: {'X-Auth-token':token},
             contentType: 'application/json',
             type: 'POST',
-            data: {add:{access_key_id:ak, secret_access_key: sa},platform:'aws'},
+            data: JSON.stringify({add:{access_key_id:ak, secret_access_key: sa},platform:'aws'}),
             success: function(data) {
                 console.log(data);
+                $('#add-identities').modal('hide');
             }
         })
 
@@ -1083,13 +1140,48 @@ $(document).on('click', '#save-identity', function() {
             headers: {'X-Auth-token':token},
             contentType: 'application/json',
             type: 'POST',
-            data: {add:{tenantName:tn, username: ui, password: pw },platform:'openstack'},
+            data: JSON.stringify({add:{tenantName:tn, username: ui, password: pw },platform:'openstack'}),
             success: function(data) {
                 console.log(data);
+                $('#add-identities').modal('hide');
             }
         })
     }
 });
+
+
+
+$(document).on('click', '#save-keypair', function() {
+    console.log(user_id);
+    var kn = $('#form-field-keypair-name').val();
+    var cn = $('#keypair-content').val();
+
+    $.ajax({
+        url: api_server.concat('/users/').concat(user_id).concat('/keypair'),
+        headers: {'X-Auth-token':token},
+        contentType: 'application/json',
+        type: 'POST',
+        data: JSON.stringify({add:{name:kn, key_type:'id_rsa', value: cn}}),
+        success: function(data) {
+            console.log(data);
+            $('#add-keypairs').modal('hide');
+        }
+    })
+
+
+});
+
+
+$.ajax({
+    url: api_server.concat('/events'),
+    headers: {'X-Auth-Token':token},
+    contentType: 'application/json',
+    type: 'GET',
+    success: function(data) {
+        console.log(data);
+    } // end of success
+}); // end of ajax
+
 
         
         });

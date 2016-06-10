@@ -870,6 +870,18 @@ $.ajax({
     } // end of success
 }); // end of ajax
 
+$.ajax({
+    url: api_server.concat('/events'),
+    headers: {'X-Auth-Token':token},
+    contentType: 'application/json',
+    type: 'GET',
+    success: function(data) {
+        console.log(data);
+    } // end of success
+}); // end of ajax
+
+
+
             }); // end of document ready
 
 		</script>
