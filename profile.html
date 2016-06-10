@@ -673,7 +673,7 @@
                                                 </span>
 
 
-                                                <span class="btn btn-app btn-sm btn-pink no-hover">
+                                                <span class="btn btn-app btn-sm btn-pink no-hover" id="identities">
                                                     <span class="line-height-1 bigger-170"> 0 </span>
 
                                                     <br />
@@ -682,7 +682,7 @@
 
 
 
-                                                <span class="btn btn-app btn-sm btn-pink no-hover">
+                                                <span class="btn btn-app btn-sm btn-pink no-hover" id="keypairs">
                                                     <span class="line-height-1 bigger-170"> 0 </span>
 
                                                     <br />
@@ -812,7 +812,102 @@
 
 
 
+<!-- Modal -->
+<div id="add-identities" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="blue bigger">Please fill the following form fields</h4>
+            </div>
 
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-7">
+                        <div class="form-group">
+                            <label for="form-field-select-3">Platform</label>
+
+                            <div>
+                                <select class="chosen-select" id="chosen-platform" data-placeholder="Choose a Platform type...">
+                                    <option value="aws" selected="selected">aws</option>
+                                    <option value="openstack">openstack</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="space-4"></div>
+
+<div id='form-aws'>
+                        <div class="form-group">
+                            <label for="form-field-username">AWS Access Key ID</label>
+
+                            <div>
+                                <input type="text" id="form-field-access-key" placeholder="access-key-id" value="xxx-xxx-xxx-xxx" />
+                            </div>
+                        </div>
+
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label for="form-field-first">AWS Secret Access Key</label>
+
+                            <div>
+                                <input type="text" id="form-field-secret-access-key" placeholder="secret-access-key" value="xxx-xxx-xxx-xxxx-xxxx" />
+                            </div>
+                        </div>
+</div>
+
+<div id='form-openstack'>
+                        <div class="form-group">
+                            <label for="form-field-username">OpenStack Tenant Name</label>
+
+                            <div>
+                                <input type="text" id="form-field-tenant-name" placeholder="tenant name" value="my tenant name" />
+                            </div>
+                        </div>
+
+                        <div class="space-4"></div>
+
+                        <div class="form-group">
+                            <label for="form-field-first">OpenStack User ID</label>
+
+                            <div>
+                                <input type="text" id="form-field-user-id" placeholder="user id" value="my id" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="form-field-first">OpenStack Password</label>
+
+                            <div>
+                                <input type="text" id="form-field-password" placeholder="password" value="my password" />
+                            </div>
+                        </div>
+
+
+</div>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-sm" data-dismiss="modal">
+                    <i class="ace-icon fa fa-times"></i>
+                    Cancel
+                </button>
+
+                <button class="btn btn-sm btn-primary" id="save-identity">
+                    <i class="ace-icon fa fa-check"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
@@ -892,6 +987,7 @@
 		<script type="text/javascript">
             var api_server = "";
             var token = "";
+            var user_id = "";
 			jQuery(function($) {
 				//initiate dataTables plugin
                 // about login
@@ -903,7 +999,7 @@
                     window.location = "login.html"
                 }
                 api_server = localStorage.getItem('api_server');
-                var user_id = localStorage.getItem('user_id');
+                user_id = localStorage.getItem('user_id');
                 $('#logout').click(function() {
                     localStorage.removeItem('token');
                     window.location = "login.html?target=profile.html";
@@ -934,8 +1030,66 @@
            });
 
 
+var selText;
+
 // Start of document ready
         jQuery(document).ready(function () {
+
+$(document).on('click', '#identities', function() {
+        console.log("Add Identities");
+        $('#add-identities').modal('show');
+        $('#form-aws').show();
+        $('#form-openstack').hide();
+ 
+});
+
+$(document).on('click', '#chosen-platform', function() {
+    selText = $('#chosen-platform option:selected').text();
+    console.log(selText);
+    if (selText == 'aws') {
+        $('#form-aws').show();
+        $('#form-openstack').hide();
+    } else if (selText == 'openstack') {
+        $('#form-aws').hide();
+        $('#form-openstack').show();
+    }
+});
+
+$(document).on('click', '#save-identity', function() {
+    console.log(selText);
+    console.log(user_id);
+    if (selText == 'aws') {
+        var ak = $('#form-field-access-key').val();
+        var sa = $('#form-field-secret-access-key').val();
+
+        $.ajax({
+            url: api_server.concat('/users/').concat(user_id).concat('/detail'),
+            headers: {'X-Auth-token':token},
+            contentType: 'application/json',
+            type: 'POST',
+            data: {add:{access_key_id:ak, secret_access_key: sa},platform:'aws'},
+            success: function(data) {
+                console.log(data);
+            }
+        })
+
+    } else if (selText == 'openstack') {
+        var tn = $('#form-field-tenant-name').val();
+        var ui = $('#form-field-user-id').val();
+        var pw = $('#form-field-password').val();
+
+        $.ajax({
+            url: api_server.concat('/users/').concat(user_id).concat('/detail'),
+            headers: {'X-Auth-token':token},
+            contentType: 'application/json',
+            type: 'POST',
+            data: {add:{tenantName:tn, username: ui, password: pw },platform:'openstack'},
+            success: function(data) {
+                console.log(data);
+            }
+        })
+    }
+});
 
         
         });
